@@ -1,14 +1,16 @@
 body {
-    padding: 0;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
 }
 
-#canvas{
-    display: flex;
-    padding: 0;
-    margin: 2px;
-    border: black 2px solid;
+#canvas {
+  display: flex;
+  padding: 0;
+  margin: 2px;
+  border: black 2px solid;
 }

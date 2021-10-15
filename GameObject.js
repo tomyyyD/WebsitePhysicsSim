@@ -5,7 +5,7 @@ class GameObject{
         this.y = y;
         this.vx = vx;
         this.vy = vy;
-        this.mass =mass;
+        this.mass = mass;
 
         this.isColliding = false;
     }
