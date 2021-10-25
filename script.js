@@ -36,8 +36,10 @@ class PhysicsSim{
         //     new Square(this.ctx, 800, 600, -50, 50, 5),
         //     new Square(this.ctx, 300, 300, 50, -50, 5)
         // ]
-        for (var i = 0; i < this.randInRange(20, 50); i++){
-            this.gameObjects.push(new Square(this.ctx, this.randInRange(0, this.width - 100), this.randInRange(0, this.height- 100), this.randInRange(-20, 20), this.randInRange(-20, 20), this.randInRange(10, 100)));
+        for (var i = 0; i < this.width/200; i++){
+            for (var j = 0; j < this.height/200; j ++){
+                this.gameObjects.push(new Square(this.ctx, i * 200, j * 200, this.randInRange(-20, 20), this.randInRange(-20, 20), this.randInRange(10, 100)));
+            }                
         }
     }
 
@@ -67,6 +69,28 @@ class PhysicsSim{
     clearCanvas(){
         //clears the entire canvas element
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
+    }
+
+    calcVelocities(obj1, obj2){
+
+        //finds the vector between the two objects
+        let collisionVector = {
+            x: obj1.x - obj2.x, 
+            y: obj1.y - obj2.y,
+        }
+        //finds the magnitude of above vector
+        let magnitude = Math.sqrt((collisionVector.x * collisionVector.x) + (collisionVector.y * collisionVector.y))
+
+        //creates the unit vector of the collision vector. AKA direction with magnitude of 1
+        let collisionNormal = {
+            x: collisionVector.x / magnitude,
+            y: collisionVector.y / magnitude,
+        }
+
+        let relativeVolocity = {
+            x: obj1.vx - obj2.vx,
+            
+        }
     }
 
     detectCollision(){
@@ -114,6 +138,44 @@ class PhysicsSim{
                     obj1.vy = p2y/obj1.mass
                     obj2.vx = p1x/obj2.mass
                     obj2.vy = p1y/obj2.mass
+
+                    calcVelocities(obj1, obj2);
+                    
+                    // //new math version
+                    // //uses system of equations with law of conservation of momentum and conservation of kinetic energy
+                    // let m1 = obj1.mass;
+                    // let vx1 = obj1.vx;
+                    // let vy1 = obj1.vy;
+                    // let m2 = obj2.mass;
+                    // let vx2 = obj2.vx;
+                    // let vy2 = obj2.vy;
+
+                    // let keix =  0.5 * m1 * (vx1 * vx1) + 0.5 * m2 * (vx2 * vx2);
+                    // let keiy =  0.5 * m1 * (vy1 * vy1) + 0.5 * m2 * (vy2 * vy2);
+                    // let pix = m1 * vx1 + m2 * vx2;
+                    // let piy = m1 * vy1 + m2 * vy2;
+
+                    // let ax = (pix * pix) / keix;
+                    // let ay = (piy * piy) / keiy;
+                    
+                    // let bx = (2 * m2 * pix) / keix;
+                    // let by = (2*m2*piy) / keiy;
+                    
+                    // let cx = ((m2 * m2) + (0.5 * m2)) / keix;
+                    // let cy = ((m2 * m2) + (0.5 * m2)) / keiy;
+                    
+                    // let ansx1 = (-1 * bx + Math.sqrt((bx * bx) - 4 * ax * cx)) / (2 * cx);
+                    // let ansx2 = (-1 * bx - Math.sqrt((bx * bx) - 4 * ax * cx)) / (2 * cx);
+
+                    // let ansy1 = (-1 * by + Math.sqrt((by * by) - 4 * ay * cy)) / (2 * cy);
+                    // let ansy2 = (-1 * by - Math.sqrt((by * by) - 4 * ay * cy)) / (2 * cy);
+
+                    // obj2.vx = ansx2;
+                    // obj1.vx = pix - (ansx1 * m2);
+
+                    // obj2.vy = ansy2;
+                    // obj1.vy = piy - (ansy1 * m2);
+
                 }
             }
         }
