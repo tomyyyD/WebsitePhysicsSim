@@ -38,7 +38,7 @@ class PhysicsSim{
         // ]
         for (var i = 0; i < this.width/200; i++){
             for (var j = 0; j < this.height/200; j ++){
-                this.gameObjects.push(new Square(this.ctx, i * 200, j * 200, this.randInRange(-20, 20), this.randInRange(-20, 20), this.randInRange(10, 100)));
+                this.gameObjects.push(new Square(this.ctx, i * 200 + 10, j * 200 + 10, this.randInRange(-20, 20), this.randInRange(-20, 20), this.randInRange(50, 100)));
             }                
         }
     }
@@ -75,8 +75,8 @@ class PhysicsSim{
 
         //finds the vector between the two objects
         let collisionVector = {
-            x: obj1.x - obj2.x, 
-            y: obj1.y - obj2.y,
+            x: obj2.x - obj1.x, 
+            y: obj2.y - obj1.y,
         }
         //finds the magnitude of above vector
         let magnitude = Math.sqrt((collisionVector.x * collisionVector.x) + (collisionVector.y * collisionVector.y))
@@ -89,8 +89,20 @@ class PhysicsSim{
 
         let relativeVolocity = {
             x: obj1.vx - obj2.vx,
-            
+            y: obj1.vy - obj2.vy,
         }
+        let speed = relativeVolocity.x * collisionNormal.x + relativeVolocity.y + collisionNormal.y;
+        if (speed < 0){
+            return;
+        }
+
+        let impulse = 2* speed / (obj1.mass + obj2.mass)
+        obj1.vx -= (impulse * obj2.mass * collisionNormal.x);
+        obj1.vy -= (impulse * obj2.mass * collisionNormal.y);
+        obj2.vx += (impulse * obj1.mass * collisionNormal.x);
+        obj2.vy += (impulse * obj1.mass * collisionNormal.y);
+
+
     }
 
     detectCollision(){
@@ -126,56 +138,22 @@ class PhysicsSim{
                     obj1.isColliding = true;
                     obj2.isColliding = true;
 
-                    //calculates momentum
-                    //p=mv
-                    let p1x = obj1.mass * obj1.vx;
-                    let p1y = obj1.mass * obj1.vy;
-                    let p2x = obj2.mass * obj2.vx;
-                    let p2y = obj2.mass * obj2.vy;
+                    let vCollision = {x: obj2.x - obj1.x, y: obj2.y - obj1.y};
+                    let distance = Math.sqrt((obj2.x-obj1.x)*(obj2.x-obj1.x) + (obj2.y-obj1.y)*(obj2.y-obj1.y));
+                    let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance};
+                    let vRelativeVelocity = {x: obj1.vx - obj2.vx, y: obj1.vy - obj2.vy};
+                    let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
 
-                    //assigns new momentum
-                    obj1.vx = p2x/obj1.mass
-                    obj1.vy = p2y/obj1.mass
-                    obj2.vx = p1x/obj2.mass
-                    obj2.vy = p1y/obj2.mass
+                    if (speed < 0) {
+                        break;
+                    }
 
-                    calcVelocities(obj1, obj2);
+                    let impulse = 2 * speed / (obj1.mass + obj2.mass);
+                    obj1.vx -= (impulse * obj2.mass * vCollisionNorm.x);
+                    obj1.vy -= (impulse * obj2.mass * vCollisionNorm.y);
+                    obj2.vx += (impulse * obj1.mass * vCollisionNorm.x);
+                    obj2.vy += (impulse * obj1.mass * vCollisionNorm.y);
                     
-                    // //new math version
-                    // //uses system of equations with law of conservation of momentum and conservation of kinetic energy
-                    // let m1 = obj1.mass;
-                    // let vx1 = obj1.vx;
-                    // let vy1 = obj1.vy;
-                    // let m2 = obj2.mass;
-                    // let vx2 = obj2.vx;
-                    // let vy2 = obj2.vy;
-
-                    // let keix =  0.5 * m1 * (vx1 * vx1) + 0.5 * m2 * (vx2 * vx2);
-                    // let keiy =  0.5 * m1 * (vy1 * vy1) + 0.5 * m2 * (vy2 * vy2);
-                    // let pix = m1 * vx1 + m2 * vx2;
-                    // let piy = m1 * vy1 + m2 * vy2;
-
-                    // let ax = (pix * pix) / keix;
-                    // let ay = (piy * piy) / keiy;
-                    
-                    // let bx = (2 * m2 * pix) / keix;
-                    // let by = (2*m2*piy) / keiy;
-                    
-                    // let cx = ((m2 * m2) + (0.5 * m2)) / keix;
-                    // let cy = ((m2 * m2) + (0.5 * m2)) / keiy;
-                    
-                    // let ansx1 = (-1 * bx + Math.sqrt((bx * bx) - 4 * ax * cx)) / (2 * cx);
-                    // let ansx2 = (-1 * bx - Math.sqrt((bx * bx) - 4 * ax * cx)) / (2 * cx);
-
-                    // let ansy1 = (-1 * by + Math.sqrt((by * by) - 4 * ay * cy)) / (2 * cy);
-                    // let ansy2 = (-1 * by - Math.sqrt((by * by) - 4 * ay * cy)) / (2 * cy);
-
-                    // obj2.vx = ansx2;
-                    // obj1.vx = pix - (ansx1 * m2);
-
-                    // obj2.vy = ansy2;
-                    // obj1.vy = piy - (ansy1 * m2);
-
                 }
             }
         }
