@@ -121,20 +121,22 @@ class PhysicsSim{
         for (let i = 0; i < this.gameObjects.length; i++){
             obj1 = this.gameObjects[i];
 
-            //checks with walls
+            //checks for collision with walls
+            let restitution = 0.90;
+
             if (obj1.x < 0 + (obj1.size/2) || obj1.x > this.width - (obj1.size/2)){
                 // obj1.vx *= -1;
                 if (obj1.x < (obj1.size/2)){
-                    obj1.vx = Math.abs(obj1.vx);
+                    obj1.vx = Math.abs(obj1.vx) * restitution;
                 }else if (obj1.x > this.width - (obj1.size/2)){
-                    obj1.vx = -1 * Math.abs(obj1.vx)
+                    obj1.vx = -1 * Math.abs(obj1.vx) * restitution;
                 }
             }
             if (obj1.y < 0 + (obj1.size/2) || obj1.y > this.height - (obj1.size/2)){
                 if (obj1.y < (obj1.size/2)){
-                    obj1.vy = Math.abs(obj1.vy);
+                    obj1.vy = Math.abs(obj1.vy) * restitution;
                 }else if (obj1.y > this.height - (obj1.size/2)){
-                    obj1.vy = -1 * Math.abs(obj1.vy)
+                    obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
                 }
             }
 
@@ -157,6 +159,7 @@ class PhysicsSim{
                     //the speed of the collision
                     let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
 
+                    speed *= restitution
                     //if objects are travelling in the same direction
                     if (speed < 0) {
                         break;
@@ -170,6 +173,8 @@ class PhysicsSim{
                     obj2.vy += (impulse * obj1.mass * vCollisionNorm.y);
                     
                 }
+
+
             }
         }
     }
