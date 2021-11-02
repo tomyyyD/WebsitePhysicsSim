@@ -131,7 +131,11 @@ class PhysicsSim{
                 }
             }
             if (obj1.y < 0 + (obj1.size/2) || obj1.y > this.height - (obj1.size/2)){
-                obj1.vy *= -1;
+                if (obj1.y < (obj1.size/2)){
+                    obj1.vy = Math.abs(obj1.vy);
+                }else if (obj1.y > this.width - (obj1.size/2)){
+                    obj1.vy = -1 * Math.abs(obj1.vy)
+                }
             }
 
             for (let j = i+1; j < this.gameObjects.length; j++){
