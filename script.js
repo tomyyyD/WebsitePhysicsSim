@@ -123,12 +123,12 @@ class PhysicsSim{
 
             //checks with walls
             if (obj1.x < 0 + (obj1.size/2) || obj1.x > this.width - (obj1.size/2)){
-                obj1.vx *= -1;
-                // if (obj1.vx > 0){
-                //     obj1.x = 0;
-                // }else if (obj1.vx < 0){
-                //     obj1.x = this.width - obj1.size;
-                // }
+                // obj1.vx *= -1;
+                if (obj1.x < (obj1.size/2)){
+                    obj1.vx = Math.abs(obj1.vx);
+                }else if (obj1.x > this.width - (obj1.size/2)){
+                    obj1.vx = -1 * Math.abs(obj1.vx)
+                }
             }
             if (obj1.y < 0 + (obj1.size/2) || obj1.y > this.height - (obj1.size/2)){
                 obj1.vy *= -1;
