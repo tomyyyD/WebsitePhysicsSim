@@ -162,7 +162,8 @@ class PhysicsSim{
                     speed *= restitution
 
                     if (speed < 0.1){
-                        speed = 0;
+                        obj1.vy = 0;
+                        obj2.vy = 0;
                     }
                     //if objects are travelling in the same direction
                     if (speed < 0) {
