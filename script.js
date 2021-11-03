@@ -122,7 +122,7 @@ class PhysicsSim{
             obj1 = this.gameObjects[i];
 
             //checks for collision with walls
-            let restitution = 0.90;
+            let restitution = 0.80;
 
             if (obj1.x < 0 + (obj1.size/2) || obj1.x > this.width - (obj1.size/2)){
                 // obj1.vx *= -1;
@@ -161,10 +161,6 @@ class PhysicsSim{
 
                     speed *= restitution
 
-                    if (speed < 0.1){
-                        obj1.vy = 0;
-                        obj2.vy = 0;
-                    }
                     //if objects are travelling in the same direction
                     if (speed < 0) {
                         break;
