@@ -136,7 +136,11 @@ class PhysicsSim{
                 if (obj1.y < (obj1.size/2)){
                     obj1.vy = Math.abs(obj1.vy) * restitution;
                 }else if (obj1.y > this.height - (obj1.size/2)){
-                    obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
+                    if (Math.abs(obj1.vy) > 0.5){
+                        obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
+                    }else{
+                        obj1.vy = 0
+                    }
                 }
             }
 
