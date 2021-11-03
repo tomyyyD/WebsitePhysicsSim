@@ -140,6 +140,7 @@ class PhysicsSim{
                         obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
                     }else{
                         obj1.vy = 0
+                        console.log("really small vertical velocity");
                     }
                 }
             }
