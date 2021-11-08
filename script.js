@@ -6,9 +6,9 @@ class PhysicsSim{
         this.gameObjects = [];
         this.width = window.innerWidth-20;
         this.height = window.innerHeight-20;
-        
-        this.init(canvasId);
         this.restitution = 1;
+
+        this.init(canvasId);
     }
     init(canvasId){
         this.canvas = document.getElementById(canvasId);
@@ -39,11 +39,15 @@ class PhysicsSim{
         //     new Square(this.ctx, 300, 300, 50, -50, 5)
         // ]
         for (var i = 0; i < Math.floor(this.width / 200); i++){
-            for (var j = 0; j < Math.floor(this.height / 200); j ++){
+            for (var j = 0; j < Math.floor(this.height / 400); j ++){
                 let size = this.randInRange(50, 100)
-                this.gameObjects.push(new Circle(this.ctx, i * 200 + 100, j * 200 + 100, this.randInRange(-20, 20), this.randInRange(-20, 20), size));
+                this.gameObjects.push(new Circle(this.ctx, i * 200 + 100, j * 400 + 100, this.randInRange(-20, 20), this.randInRange(-20, 20), size));
             }                
         }
+
+        // //test single circle
+        // this.gameObjects.push(new Circle(this.ctx,this.width/2, this.height/2, 0, 0, 50))
+
     }
 
     gameLoop(timeStamp){
@@ -58,6 +62,7 @@ class PhysicsSim{
 
         //here I need to detect collision
         this.detectCollision();
+        this.edgeDetection();
         this.clearCanvas();
 
         //loops over to draw all physics objects
@@ -105,7 +110,6 @@ class PhysicsSim{
         obj2.vx += (impulse * obj1.mass * collisionNormal.x);
         obj2.vy += (impulse * obj1.mass * collisionNormal.y);
 
-
     }
 
     detectCollision(){
@@ -121,29 +125,22 @@ class PhysicsSim{
         for (let i = 0; i < this.gameObjects.length; i++){
             obj1 = this.gameObjects[i];
 
-            //checks for collision with walls
-            let restitution = 0.80;
-
-            if (obj1.x < 0 + (obj1.size/2) || obj1.x > this.width - (obj1.size/2)){
-                // obj1.vx *= -1;
-                if (obj1.x < (obj1.size/2)){
-                    obj1.vx = Math.abs(obj1.vx) * restitution;
-                }else if (obj1.x > this.width - (obj1.size/2)){
-                    obj1.vx = -1 * Math.abs(obj1.vx) * restitution;
-                }
-            }
-            if (obj1.y < 0 + (obj1.size/2) || obj1.y > this.height - (obj1.size/2)){
-                if (obj1.y < (obj1.size/2)){
-                    obj1.vy = Math.abs(obj1.vy) * restitution;
-                }else if (obj1.y > this.height - (obj1.size/2)){
-                    if (Math.abs(obj1.vy) > 0.5){
-                        obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
-                    }else{
-                        obj1.vy = 0
-                        console.log("really small vertical velocity");
-                    }
-                }
-            }
+            // //check left wall
+            // if (obj1.x < 0 + (obj1.size/2) || obj1.x > this.width - (obj1.size/2)){
+            //     // obj1.vx *= -1;
+            //     if (obj1.x < (obj1.size/2)){
+            //         obj1.vx = Math.abs(obj1.vx) * restitution;
+            //     }else if (obj1.x > this.width - (obj1.size/2)){
+            //         obj1.vx = -1 * Math.abs(obj1.vx) * restitution;
+            //     }
+            // }
+            // if (obj1.y < 0 + (obj1.size/2) || obj1.y > this.height - (obj1.size/2)){
+            //     if (obj1.y < (obj1.size/2)){
+            //         obj1.vy = Math.abs(obj1.vy) * restitution;
+            //     }else if (obj1.y > this.height - (obj1.size/2)){
+            //         obj1.vy = -1 * Math.abs(obj1.vy) * restitution;
+            //     }
+            // }
 
             for (let j = i+1; j < this.gameObjects.length; j++){
                 obj2 = this.gameObjects[j];
@@ -164,7 +161,7 @@ class PhysicsSim{
                     //the speed of the collision
                     let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
 
-                    speed *= restitution
+                    speed *= this.restitution
 
                     //if objects are travelling in the same direction
                     if (speed < 0) {
@@ -181,6 +178,37 @@ class PhysicsSim{
                 }
 
 
+            }
+        }
+    }
+
+    edgeDetection(){
+        let obj;
+        for (let i = 0; i < this.gameObjects.length; i++){
+            obj = this.gameObjects[i]
+
+            //console.log(this.restitution);
+
+            //check left wall
+            if(obj.x < (obj.size/2)){
+                obj.vx = Math.abs(obj.vx) * this.restitution;
+                obj.x = (obj.size/2);
+            }
+            //check right wall
+            else if(obj.x > this.width - (obj.size/2)){
+                obj.vx = -Math.abs(obj.vx) * this.restitution;
+                obj.x = this.width - (obj.size/2);
+            }
+
+            //check top
+            if (obj.y < (obj.size/2)){
+                obj.vy = Math.abs(obj.vy) * this.restitution;
+                obj.y = (obj.size/2);
+            }
+            //check bottom
+            else if (obj.y > this.height - (obj.size/2)){
+                obj.vy = -Math.abs(obj.vy) * this.restitution;
+                obj.y = this.height - (obj.size/2);
             }
         }
     }

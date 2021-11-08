@@ -17,12 +17,13 @@ class Circle extends GameObject{
     }
 
     update(secondsPassed){
+        //gravity
+        this.vy += 981 * secondsPassed;
+
         //move with velocity
         this.x += (this.vx * secondsPassed);
         this.y += (this.vy * secondsPassed);
 
-        //gravity
-        this.vy += 9.81;
-        //console.log("running");
+        //console.log(this.vy)
     }
 }
