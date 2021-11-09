@@ -161,7 +161,7 @@ class PhysicsSim{
                     //the speed of the collision
                     let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
 
-                    speed *= this.restitution
+                    //speed *= this.restitution
 
                     //if objects are travelling in the same direction
                     if (speed < 0) {
