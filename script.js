@@ -39,9 +39,9 @@ class PhysicsSim{
         //     new Square(this.ctx, 300, 300, 50, -50, 5)
         // ]
         for (var i = 0; i < Math.floor(this.width / 200); i++){
-            for (var j = 0; j < Math.floor(this.height / 400); j ++){
+            for (var j = 0; j < Math.floor(this.height / 200); j ++){
                 let size = this.randInRange(50, 100)
-                this.gameObjects.push(new Circle(this.ctx, i * 200 + 100, j * 400 + 100, this.randInRange(-20, 20), this.randInRange(-20, 20), size));
+                this.gameObjects.push(new Circle(this.ctx, i * 200 + 100, j * 200 + 100, this.randInRange(-20, 20), this.randInRange(-20, 20), size));
             }                
         }
 
