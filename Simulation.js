@@ -38,14 +38,15 @@ class PhysicsSim{
     //eventually transition this into being mousepos and clicks
     createWorld(){
 
-        for (var i = 0; i < Math.floor(this.width / 200); i++){
-            for (var j = 0; j < Math.floor(this.height / 200); j ++){
+        let step = 200;
+        for (var i = 0; i < Math.floor(this.width / step); i++){
+            for (var j = 0; j < Math.floor(this.height / step); j ++){
                 
-                let size = this.randInRange(50, 100)
-                let x = i * 200 + 100;
-                let y = j * 200 + 100;
-                let vx = this.randInRange(-100, 100);
-                let vy = this.randInRange(-100, 100);
+                let size = this.randInRange(50, 200)
+                let x = i * step + step/2;
+                let y = j * step+ step/2;
+                let vx = this.randInRange(-50, 50);
+                let vy = this.randInRange(-50, 50);
 
                 var newObj = new Circle(this.ctx, x, y, vx, vy, size, this.gravity)
                 this.gameObjects.push(newObj);
@@ -90,6 +91,20 @@ class PhysicsSim{
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
     }
 
+    resolveCollisionOOP(collision){
+        //adjusts position of objects so they are no longer overlapping
+        collision.obj1.x -= collision.vCollisionNorm.x * (collision.collisionDepth/2)
+        collision.obj1.y -= collision.vCollisionNorm.y * (collision.collisionDepth/2)
+        collision.obj2.x += collision.vCollisionNorm.x * (collision.collisionDepth/2)
+        collision.obj2.y += collision.vCollisionNorm.y * (collision.collisionDepth/2)
+
+        //adjusts velocities
+        collision.obj1.vx -= (collision.impulse * collision.obj2.mass * collision.vCollisionNorm.x)
+        collision.obj1.vy -= (collision.impulse * collision.obj2.mass * collision.vCollisionNorm.y)
+        collision.obj2.vx += (collision.impulse * collision.obj1.mass * collision.vCollisionNorm.x)
+        collision.obj2.vy += (collision.impulse * collision.obj1.mass * collision.vCollisionNorm.y)
+    }
+
     detectCollision(){
         let obj1;
         let obj2;
@@ -99,55 +114,25 @@ class PhysicsSim{
             this.gameObjects[i].isColliding = false;
         }
 
-        //checking for collision
+        //loop through all pairs of objects
         for (let i = 0; i < this.gameObjects.length; i++){
             obj1 = this.gameObjects[i];
 
             for (let j = i+1; j < this.gameObjects.length; j++){
                 obj2 = this.gameObjects[j];
 
-                if(this.circleCheck(obj1.x, obj1.y, obj1.size, obj2.x, obj2.y, obj2.size)){
-                    obj1.isColliding = true;
-                    obj2.isColliding = true;
+                //get collision pair
+                let collision = new CollisionPair(obj1, obj2);
 
-                    //collision vector - the vector between the center of objects 1 and 2
-                    let vCollision = {x: obj2.x - obj1.x, y: obj2.y - obj1.y};
-                    // distance between objects 1 and 2 - magnitude of collision vector
-                    let distance = Math.sqrt((obj2.x-obj1.x)*(obj2.x-obj1.x) + (obj2.y-obj1.y)*(obj2.y-obj1.y));
+                //check for collision between object 1 and 2
+                if(this.circleCheck(collision)){
 
-                    //normal collision vector - collision vector but with a magnitude of one
-                    let vCollisionNorm = {x: vCollision.x / distance, y: vCollision.y / distance};
+                    // obj1.isColliding = true;
+                    // obj2.isColliding = true;
 
-                    //depth of collision at frame
-                    let collisionDepth = obj1.size/2 + obj2.size/2 - distance;
+                    this.resolveCollisionOOP(collision);
 
-                    //pushes each object half of the collision depth
-                    //so that there is no overlap
-                    //credit to Martin Heinz for this part
-                    obj1.x -= vCollisionNorm.x * (collisionDepth/2)
-                    obj1.y -= vCollisionNorm.y * (collisionDepth/2)
-                    obj2.x += vCollisionNorm.x * (collisionDepth/2);
-                    obj2.y += vCollisionNorm.y * (collisionDepth/2);
-
-                    //relative velocity vector - the vector between the velocity vector of the 2 objects
-                    let vRelativeVelocity = {x: obj1.vx - obj2.vx, y: obj1.vy - obj2.vy};
-                    //the speed of the collision
-                    let speed = vRelativeVelocity.x * vCollisionNorm.x + vRelativeVelocity.y * vCollisionNorm.y;
-
-                    speed *= this.restitution
-
-                    //if objects are travelling in the same direction
-                    if (speed < 0) {
-                        break;
-                    }
-
-                    //apply collision speed to the objects
-                    let impulse = 2 * speed / (obj1.mass + obj2.mass);
-                    obj1.vx -= (impulse * obj2.mass * vCollisionNorm.x);
-                    obj1.vy -= (impulse * obj2.mass * vCollisionNorm.y);
-                    obj2.vx += (impulse * obj1.mass * vCollisionNorm.x);
-                    obj2.vy += (impulse * obj1.mass * vCollisionNorm.y);
-                    
+                    //this.resolveCollision(obj1, obj2)
                 }
 
 
@@ -200,19 +185,12 @@ class PhysicsSim{
         (x2, y2): position of circle 2
         d2: diameter of circle 2
     */
-    circleCheck(x1, y1, d1, x2, y2, d2){
+    circleCheck(collision){
         //radii added together equals the collision distance
-        let minDistance = d1/2 + d2/2;
-
-        //finds distance between two objects
-        let dx = x2 - x1;
-        let dy = y2 - y1;
-
-        //distance formula but optimized so no square roots
-        let colMagnitude = dx * dx + dy * dy;
+        let minDistance = collision.obj1.radius + collision.obj2.radius;
 
         //if distance > radii added together collision is happening
-        if (colMagnitude < minDistance * minDistance){
+        if (collision.distance < minDistance){
             return true
         }else{
             return false
