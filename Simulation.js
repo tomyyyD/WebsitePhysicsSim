@@ -67,6 +67,7 @@ class PhysicsSim{
         //loops over to update all physics objects
         for (var i = 0; i < this.gameObjects.length; i++){
             this.gameObjects[i].update(secondsPassed);
+            this.gameObjects[i].vy += this.gravity * 100 * secondsPassed;
         }
 
         //here I need to detect collision
@@ -77,6 +78,7 @@ class PhysicsSim{
         //loops over to draw all physics objects
         for (var i = 0; i < this.gameObjects.length; i++){
             this.gameObjects[i].draw();
+
         }
 
         //recursion moment

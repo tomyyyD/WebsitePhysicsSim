@@ -25,7 +25,7 @@ class Circle extends GameObject{
 
     update(secondsPassed){
         //gravity
-        this.vy += this.gravity * 100 * secondsPassed;
+        //this.vy += this.gravity * 100 * secondsPassed;
 
         //move with velocity
         this.x += (this.vx * secondsPassed);

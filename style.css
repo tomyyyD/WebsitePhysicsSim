@@ -18,6 +18,11 @@ body{
   border: black 5px solid;
 }
 
+.controls{
+  display: flex;
+  flex-direction: row;
+}
+
 #canvas {
   display: flex;
   padding: 0;
