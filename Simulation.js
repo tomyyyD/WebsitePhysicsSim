@@ -93,7 +93,7 @@ class PhysicsSim{
         this.ctx.clearRect(0,0, this.canvas.width, this.canvas.height);
     }
 
-    resolveCollisionOOP(collision){
+    resolveCollision(collision){
         //adjusts position of objects so they are no longer overlapping
         collision.obj1.x -= collision.vCollisionNorm.x * (collision.collisionDepth/2)
         collision.obj1.y -= collision.vCollisionNorm.y * (collision.collisionDepth/2)
@@ -132,7 +132,8 @@ class PhysicsSim{
                     // obj1.isColliding = true;
                     // obj2.isColliding = true;
 
-                    this.resolveCollisionOOP(collision);
+
+                    this.resolveCollision(collision);
 
                     //this.resolveCollision(obj1, obj2)
                 }
