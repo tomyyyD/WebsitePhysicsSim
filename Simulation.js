@@ -18,10 +18,10 @@ class PhysicsSim{
         this.container = document.getElementById("simulation")
         this.ctx = this.canvas.getContext('2d');
 
-        canvas.width = this.container.clientWidth;
-        canvas.height = this.container.clientHeight;
-        this.width = canvas.width;
-        this.height = canvas.height;
+        this.canvas.width = this.container.clientWidth;
+        this.canvas.height = this.container.clientHeight;
+        this.width = this.canvas.width;
+        this.height = this.canvas.height;
 
         this.createWorld()
 
