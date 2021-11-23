@@ -44,7 +44,7 @@ class PhysicsSim{
                 
                 let size = this.randInRange(50, 200)
                 let x = i * step + step/2;
-                let y = j * step+ step/2;
+                let y = j * step + step/2;
                 let vx = this.randInRange(-50, 50);
                 let vy = this.randInRange(-50, 50);
 

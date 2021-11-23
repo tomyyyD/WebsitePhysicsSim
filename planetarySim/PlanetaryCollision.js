@@ -25,13 +25,17 @@ class PlanetaryCollision{
 
     }
 
+    randInRange(min, max){
+        return (Math.random() * (max-min)) + min;
+    }
+
     createObjects(){
         let gameObjects = [];
         let intervals = 200
         let widthVal = this.width/intervals
         for (var i = 0; i < widthVal; i + 200){
-            let mass =  Simulation.randInRange(50,200);
-            let radius = Simulation.randInRange(50,100);
+            let mass =  this.randInRange(50,200);
+            let radius = this.randInRange(50,100);
             let xPos = i * intervals + (intervals/2);
             let yPos = intervals
 
@@ -46,6 +50,21 @@ class PlanetaryCollision{
         this.lasttime = timestamp;
 
         //loop through all objects
-        
+        for (let i = 0; i < this.gameObjects.length; i ++){
+            this.gameObjects[i].update(this.deltaTime);
+        }
+
+        //check for collision against walls
+        //loop through all pairs of objects
+        for (let i = 0; i < this.gameObjects.length; i++){
+            obj1 = this.gameObjects[i];
+
+            for (let j = i+1; j < this.gameObjects.length; j++){
+                obj2 = this.gameObjects[j];
+
+                
+
+            }
+        }        
     }
 }
