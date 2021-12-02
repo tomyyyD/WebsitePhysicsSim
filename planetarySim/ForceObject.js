@@ -1,5 +1,7 @@
 class ForceObject{
-    constructor(x,y, mass, radius){
+    constructor(context, x,y, mass, radius){
+        this.context = context
+
         this.x = x;
         this.y = y;
         this.mass = mass;
