@@ -1,6 +1,9 @@
+let physicsSim = null;
+
 function startPlanets(canvasId){
 
-    let gravConstant = 6674 / 100000000000000;
+    //G in real life = 6674 / 100000000000000
+    let gravConstant = 1;
 
     physicsSim = new PlanetaryCollision(canvasId, gravConstant)
 }

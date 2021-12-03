@@ -9,13 +9,7 @@ class ForcePair{
         }
 
         this.sqDistance = (this.dv.x * this.dv.x) + (this.dv.y * this.dv.y)
-        this.nv = null;
-        this.fg = null;
-        this.fgx = null;
-        this.fgy = null;
-    }
 
-    calcGravity(){
         this.nv = {
             x: this.dv.x * this.dv.x / this.sqDistance,
             y: this.dv.y * this.dv.y / this.sqDistance,
@@ -25,7 +19,5 @@ class ForcePair{
 
         this.fgx = this.fg * this.nv.x;
         this.fgy = this.fg * this.nv.y;
-
-
     }
 }

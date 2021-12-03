@@ -18,7 +18,7 @@ class ForceObject{
         //draw the square
         this.context.fillStyle = '#0099b0';
         this.context.beginPath();
-        this.context.arc(this.x, this.y, this.size/2, 0, 2*Math.PI);
+        this.context.arc(this.x, this.y, this.radius/2, 0, 2*Math.PI);
         this.context.fill();
         this.context.fillStyle = 'black';
 
@@ -34,5 +34,8 @@ class ForceObject{
         //calc velocity with vf = vi + at
         this.vx += this.ax * deltaTime;
         this.vy += this.ay * deltaTime;
+
+        this.x += this.vx * deltaTime;
+        this.y += this.vy * deltaTime;
     }
 }
