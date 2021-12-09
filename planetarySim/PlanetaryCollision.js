@@ -34,9 +34,9 @@ class PlanetaryCollision{
     createObjects(){
         let intervals = 200
         let widthVal = this.width/intervals
-        for (var i = 0; i < 3; i++){
-            let mass =  this.randInRange(50,200);
-            let radius = this.randInRange(50,100);
+        for (var i = 0; i < 2; i++){
+            let radius = this.randInRange(25,50);
+            let mass =  radius * 4;
             let xPos = i * intervals + (intervals/2);
             let yPos = i * intervals + (intervals/2);
 
@@ -46,42 +46,70 @@ class PlanetaryCollision{
         }
     }
 
-    applyForces(){
+    applyForces(deltaTime){
         //check for collision against walls
         //loop through all pairs of objects
         for (let i = 0; i < this.gameObjects.length; i++){
             let obj1 = this.gameObjects[i];
 
-            for (let j = i+1; j < this.gameObjects.length; j++){
+            for (let j = i + 1; j < this.gameObjects.length; j++){
                 let obj2 = this.gameObjects[j];
 
-                let interaction = new ForcePair(obj1, obj2, this.G);
+                let interaction = new ForcePair(obj1, obj2, this.G, this.context);
 
                 let isColliding = this.circleCollision(interaction)
 
                 //console.log(isColliding);
 
+                //new force 
+                //F = ma so...
+                //F = m dV/dt
+                //F = m delta V / delta t
+                //F = -Vnaught / change in time
+
                 if (isColliding){
-                    obj1.fx = -obj1.fx;
-                    obj1.fy = -obj1.fy;
-                    obj2.fx = -obj1.fx;
-                    obj1.fy = -obj1.fy;
-                }else{
+                    obj1.fx = -obj1.mass * (obj1.vx / deltaTime);
+                    obj1.fy = -obj1.mass * (obj1.vy / deltaTime);
+                    obj2.fx = -obj2.mass * (obj2.vx / deltaTime);
+                    obj2.fy = -obj2.mass * (obj2.vy / deltaTime);
+
+                    obj1.x -= interaction.nv.x * (interaction.collisionDepth/2)
+                    obj1.y -= interaction.nv.y * (interaction.collisionDepth/2)
+                    obj2.x += interaction.nv.x * (interaction.collisionDepth/2)
+                    obj2.y += interaction.nv.y * (interaction.collisionDepth/2)
+                }
+                else{
                     obj1.fx = interaction.fgx
                     obj1.fy = interaction.fgy
-                    
                     obj2.fx = -interaction.fgx
-                    obj2.fy = -interaction.fgy    
+                    obj2.fy = -interaction.fgy
                 }
-
             }
         }        
+    }
+
+    moveObjects(){
+        for (let i = 0; i < this.gameObjects.length; i++){
+            let obj1 = this.gameObjects[i];
+
+            for (let j = i + 1; j < this.gameObjects.length; j++){
+                let obj2 = this.gameObjects[j];
+                
+                let interaction = new ForcePair(obj1, obj2, this.G, this.context);
+
+                obj1.fx = interaction.fgx
+                obj1.fy = interaction.fgy
+                obj2.fx = -interaction.fgx
+                obj2.fy = -interaction.fgy
+            }
+        }
     }
 
     gameLoop(timestamp){
         this.deltaTime = (timestamp - this.lasttime) / 1000;
         this.lasttime = timestamp;
 
+        //this.moveObjects();
         for (let i = 0; i < this.gameObjects.length; i++){
             this.gameObjects[i].update(this.deltaTime);
         }
@@ -89,7 +117,7 @@ class PlanetaryCollision{
         this.clearCanvas();
 
         this.edgeDetection();
-        this.applyForces();
+        this.applyForces(this.deltaTime);
 
         for (let i = 0; i < this.gameObjects.length; i ++){
             this.gameObjects[i].draw()
@@ -107,7 +135,7 @@ class PlanetaryCollision{
     circleCollision(interaction){
         let minDistance = interaction.obj1.radius + interaction.obj2.radius;
 
-        if (interaction.sqDistance < (minDistance*minDistance)){
+        if (interaction.distance < minDistance){
             return true;
         }else{
             return false;
