@@ -37,8 +37,8 @@ class PlanetaryCollision{
         for (var i = 0; i < 2; i++){
             let radius = this.randInRange(25,50);
             let mass =  radius * 4;
-            let xPos = i * intervals + (intervals/2);
-            let yPos = i * intervals + (intervals/2);
+            let xPos = i * intervals;
+            let yPos = i * intervals;
 
             let object = new ForceObject(this.context, xPos, yPos, mass, radius)
 
@@ -68,22 +68,23 @@ class PlanetaryCollision{
                 //F = -Vnaught / change in time
 
                 if (isColliding){
-                    obj1.fx = -obj1.mass * (obj1.vx / deltaTime);
-                    obj1.fy = -obj1.mass * (obj1.vy / deltaTime);
-                    obj2.fx = -obj2.mass * (obj2.vx / deltaTime);
-                    obj2.fy = -obj2.mass * (obj2.vy / deltaTime);
-
+                    console.log("Collision")
                     obj1.x -= interaction.nv.x * (interaction.collisionDepth/2)
                     obj1.y -= interaction.nv.y * (interaction.collisionDepth/2)
                     obj2.x += interaction.nv.x * (interaction.collisionDepth/2)
                     obj2.y += interaction.nv.y * (interaction.collisionDepth/2)
+
+                    obj1.fx += -obj1.mass * obj1.vx / deltaTime;
+                    obj1.fy += -obj1.mass * obj1.vy / deltaTime;
+                    obj2.fx += -obj2.mass * obj2.vx / deltaTime;
+                    obj2.fy += -obj2.mass * obj2.vy / deltaTime;
                 }
-                else{
-                    obj1.fx = interaction.fgx
-                    obj1.fy = interaction.fgy
-                    obj2.fx = -interaction.fgx
-                    obj2.fy = -interaction.fgy
-                }
+                // else{
+                //     obj1.fx = interaction.fgx
+                //     obj1.fy = interaction.fgy
+                //     obj2.fx = -interaction.fgx
+                //     obj2.fy = -interaction.fgy
+                // }
             }
         }        
     }
@@ -97,10 +98,11 @@ class PlanetaryCollision{
                 
                 let interaction = new ForcePair(obj1, obj2, this.G, this.context);
 
-                obj1.fx = interaction.fgx
-                obj1.fy = interaction.fgy
-                obj2.fx = -interaction.fgx
-                obj2.fy = -interaction.fgy
+                obj1.fx += interaction.fgx
+                obj1.fy += interaction.fgy
+                obj2.fx += -interaction.fgx
+                obj2.fy += -interaction.fgy
+                //console.log(`${obj1.fx}:${obj1.fy} | ${obj2.fx}:${obj2.fy}`)
             }
         }
     }
@@ -109,15 +111,16 @@ class PlanetaryCollision{
         this.deltaTime = (timestamp - this.lasttime) / 1000;
         this.lasttime = timestamp;
 
-        //this.moveObjects();
+        this.moveObjects();
+        this.applyForces(this.deltaTime);
         for (let i = 0; i < this.gameObjects.length; i++){
             this.gameObjects[i].update(this.deltaTime);
         }
 
         this.clearCanvas();
 
-        this.edgeDetection();
-        this.applyForces(this.deltaTime);
+        //this.edgeDetection();
+
 
         for (let i = 0; i < this.gameObjects.length; i ++){
             this.gameObjects[i].draw()
@@ -150,23 +153,23 @@ class PlanetaryCollision{
             //check left wall
             if(obj.x < (obj.radius)){
                 obj.vx = Math.abs(obj.vx);
-                obj.x = (obj.size/2);
+                obj.x = (obj.radius);
             }
             //check right wall
-            else if(obj.x > this.width - (obj.size/2)){
-                obj.vx = -Math.abs(obj.vx) * this.restitution;
-                obj.x = this.width - (obj.size/2);
+            else if(obj.x > this.width - (obj.radius)){
+                obj.vx = -Math.abs(obj.vx);
+                obj.x = this.width - (obj.radius);
             }
 
             //check top
-            if (obj.y < (obj.size/2)){
-                obj.vy = Math.abs(obj.vy) * this.restitution;
-                obj.y = (obj.size/2);
+            if (obj.y < (obj.radius)){
+                obj.vy = Math.abs(obj.vy);
+                obj.y = (obj.radius);
             }
             //check bottom
-            else if (obj.y > this.height - (obj.size/2)){
-                obj.vy = -Math.abs(obj.vy) * this.restitution;
-                obj.y = this.height - (obj.size/2);
+            else if (obj.y > this.height - (obj.radius)){
+                obj.vy = -Math.abs(obj.vy);
+                obj.y = this.height - (obj.radius);
             }
         }
     }

@@ -30,7 +30,6 @@ class ForceObject{
         //calc acceleration in x and y w/ f=ma
         this.ax = this.fx / this.mass;
         this.ay = this.fy / this.mass;
-        console.log(this.ax)
 
         //calc velocity with vf = vi + at
         this.vx += this.ax * deltaTime;
