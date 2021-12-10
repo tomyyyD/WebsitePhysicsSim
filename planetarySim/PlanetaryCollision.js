@@ -98,10 +98,10 @@ class PlanetaryCollision{
                 
                 let interaction = new ForcePair(obj1, obj2, this.G, this.context);
 
-                obj1.fx += interaction.fgx
-                obj1.fy += interaction.fgy
-                obj2.fx += -interaction.fgx
-                obj2.fy += -interaction.fgy
+                obj1.fx = interaction.fgx
+                obj1.fy = interaction.fgy
+                obj2.fx = -interaction.fgx
+                obj2.fy = -interaction.fgy
                 //console.log(`${obj1.fx}:${obj1.fy} | ${obj2.fx}:${obj2.fy}`)
             }
         }
