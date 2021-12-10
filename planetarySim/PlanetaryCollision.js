@@ -74,10 +74,10 @@ class PlanetaryCollision{
                     obj2.x += interaction.nv.x * (interaction.collisionDepth/2)
                     obj2.y += interaction.nv.y * (interaction.collisionDepth/2)
 
-                    obj1.fx += -obj1.mass * obj1.vx / deltaTime;
-                    obj1.fy += -obj1.mass * obj1.vy / deltaTime;
-                    obj2.fx += -obj2.mass * obj2.vx / deltaTime;
-                    obj2.fy += -obj2.mass * obj2.vy / deltaTime;
+                    obj1.fx = -obj1.mass * obj1.vx / deltaTime;
+                    obj1.fy = -obj1.mass * obj1.vy / deltaTime;
+                    obj2.fx = -obj2.mass * obj2.vx / deltaTime;
+                    obj2.fy = -obj2.mass * obj2.vy / deltaTime;
                 }
                 // else{
                 //     obj1.fx = interaction.fgx
