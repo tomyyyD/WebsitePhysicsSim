@@ -74,10 +74,10 @@ class PlanetaryCollision{
                     obj2.x += interaction.nv.x * (interaction.collisionDepth/2)
                     obj2.y += interaction.nv.y * (interaction.collisionDepth/2)
 
-                    obj1.fx = -obj1.mass * obj1.vx / deltaTime;
-                    obj1.fy = -obj1.mass * obj1.vy / deltaTime;
-                    obj2.fx = -obj2.mass * obj2.vx / deltaTime;
-                    obj2.fy = -obj2.mass * obj2.vy / deltaTime;
+                    obj1.fx += -obj1.mass * obj1.vx / deltaTime;
+                    obj1.fy += -obj1.mass * obj1.vy / deltaTime;
+                    obj2.fx += -obj2.mass * obj2.vx / deltaTime;
+                    obj2.fy += -obj2.mass * obj2.vy / deltaTime;
                 }
                 // else{
                 //     obj1.fx = interaction.fgx
@@ -98,12 +98,20 @@ class PlanetaryCollision{
                 
                 let interaction = new ForcePair(obj1, obj2, this.G, this.context);
 
-                obj1.fx = interaction.fgx
-                obj1.fy = interaction.fgy
-                obj2.fx = -interaction.fgx
-                obj2.fy = -interaction.fgy
+                obj1.fx += interaction.fgx
+                obj1.fy += interaction.fgy
+                obj2.fx += -interaction.fgx
+                obj2.fy += -interaction.fgy
                 //console.log(`${obj1.fx}:${obj1.fy} | ${obj2.fx}:${obj2.fy}`)
             }
+        }
+    }
+
+    clearForces(){
+        for (let i = 0; this.gameObjects.length; i++){
+            let obj = this.gameObjects[i];
+            obj.fx = 0;
+            obj.fy = 0;
         }
     }
 
@@ -111,6 +119,7 @@ class PlanetaryCollision{
         this.deltaTime = (timestamp - this.lasttime) / 1000;
         this.lasttime = timestamp;
 
+        this.clearForces();
         this.moveObjects();
         this.applyForces(this.deltaTime);
         for (let i = 0; i < this.gameObjects.length; i++){
