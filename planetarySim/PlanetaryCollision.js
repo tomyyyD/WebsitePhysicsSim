@@ -36,10 +36,12 @@ class PlanetaryCollision{
         let object1 = new ForceObject(this.context, 100, 400, 90, 50)
         let object2 = new ForceObject(this.context, 500, 400, 30, 35)
         let object3 = new ForceObject(this.context, 600, 400, 10, 20)
+        let object4 = new ForceObject(this.context, 300, 200, 50, 40)   
 
         this.gameObjects.push(object1)
         this.gameObjects.push(object2)
         this.gameObjects.push(object3)
+        this.gameObjects.push(object4)
 
         // let intervals = 200
         // let widthVal = this.width/intervals
