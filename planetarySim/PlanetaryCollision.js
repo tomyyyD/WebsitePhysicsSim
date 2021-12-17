@@ -34,16 +34,16 @@ class PlanetaryCollision{
 
     createObjects(){
 
-        let object1 = new ForceObject(this.context, 100, 400, 90, 50)
-        let object2 = new ForceObject(this.context, 500, 400, 30, 35)
-        let object3 = new ForceObject(this.context, 600, 400, 10, 20)
-        //let object4 = new ForceObject(this.context, 300, 200, 50, 40)   
+        let object1 = new ForceObject(this.context, 100, 400, 20, -10, 90, 50)
+        let object2 = new ForceObject(this.context, 500, 400, -4, 7, 30, 35)
+        let object3 = new ForceObject(this.context, 600, 400, 18, -19, 10, 20)
+        let object4 = new ForceObject(this.context, 300, 200, -2, 16, 50, 40)   
         this.totalMass = 90 + 30 + 10
 
         this.gameObjects.push(object1)
         this.gameObjects.push(object2)
         this.gameObjects.push(object3)
-        //this.gameObjects.push(object4)
+        this.gameObjects.push(object4)
 
         // let intervals = 200
         // let widthVal = Math.floor(this.width/intervals);
@@ -93,13 +93,18 @@ class PlanetaryCollision{
                     // obj2.fx += -obj2.mass * obj2.vx / deltaTime;
                     // obj2.fy += -obj2.mass * obj2.vy / deltaTime;
 
-                    let forcePercent = (obj1.mass + obj2.mass)/this.totalMass;
+                    let velDiffX = obj2.vx - obj1.vx
+                    let velDiffY = obj2.vy - obj1.vy;
 
-                    obj1.fx += -obj1.mass * obj1.vx / deltaTime;
-                    obj1.fy += -obj1.mass * obj1.vy / deltaTime;
-                    obj2.fx += -obj2.mass * obj2.vx / deltaTime;
-                    obj2.fy += -obj2.mass * obj2.vy / deltaTime;
 
+                    obj1.fx += obj2.mass * velDiffX / deltaTime;
+                    obj1.fy += obj2.mass * velDiffY / deltaTime;
+                    obj2.fx += -obj2.mass * velDiffX / deltaTime;
+                    obj2.fy += -obj2.mass * velDiffY / deltaTime;
+                    
+                    //console.log(`${obj1.fx} || ${obj2.fx} || ${velDiffX}:${velDiffY}`)
+                    // console.log(`${obj2.mass * velDiffX / deltaTime} : ${interaction.fgx}`)
+                    // console.log(`${obj2.mass * velDiffY / deltaTime} : ${interaction.fgy}`)
                 }
             }
         }        
@@ -118,7 +123,7 @@ class PlanetaryCollision{
                 obj1.fy += interaction.fgy
                 obj2.fx += -interaction.fgx
                 obj2.fy += -interaction.fgy
-                //console.log(`${obj1.fx}:${obj1.fy} | ${obj2.fx}:${obj2.fy}`)
+                //console.log(`(${obj1.fx}:${obj1.fy}) || (${obj2.fx}:${obj2.fy})`)
             }
         }
     }
@@ -140,18 +145,9 @@ class PlanetaryCollision{
             this.gameObjects[i].update(this.deltaTime);
         }
 
-        let netForceX = 0
-        let netForceY = 0
-        for (let i = 0; i < this.gameObjects.length; i++){
-            netForceX += this.gameObjects[i].fx;
-            netForceY += this.gameObjects[i].fy;
-            //console.log(netForceX, netForceY);
-        }
-
         this.clearCanvas();
 
         //this.edgeDetection();
-
 
         for (let i = 0; i < this.gameObjects.length; i ++){
             this.gameObjects[i].draw()

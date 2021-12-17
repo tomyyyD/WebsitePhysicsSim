@@ -1,5 +1,5 @@
 class ForceObject{
-    constructor(context, x,y, mass, radius){
+    constructor(context, x,y, vx, vy, mass, radius){
         this.context = context
 
         this.x = x;
@@ -10,8 +10,8 @@ class ForceObject{
         this.fy = 0;
         this.ax = 0;
         this.ay = 0;
-        this.vx = 0;
-        this.vy = 0;
+        this.vx = vx;
+        this.vy = vy;
     }
 
     draw(){
