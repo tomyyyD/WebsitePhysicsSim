@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../style.css">
+
+    <script type="text/javascript" defer src="GameObject.js"></script>
+    <script type="text/javascript" defer src="Square.js"></script>
+    <script type="text/javascript" defer src="Circle.js"></script>
+    <script type="text/javascript" defer src="Simulation.js"></script>
+    <script type="text/javascript" defer src="start.js"></script>
+    <script type="text/javascript" defer src="CollisionPair.js"></script>
+</head>
+
+<body>
+    <div class="controls">
+        <div class="gravityControl">
+            <p for="gravity" id="gravLabel">Gravity: 5</p>
+            <input type="range" class="inputSlider" min="0" max="20" value="5" id='gravity'>
+        </div>
+        <div class="restControl">
+            <p for="restitution" id="restLabel">Restitution: 65</p>
+            <input type="range" class="inputSlider" min="0" max="100" value="65" id='restitution'>    
+        </div>
+        <button onclick="main('canvas')" class="startSim">
+            Start
+        </button>  
+    </div>
+
+
+    <div id="simulation" class="simulation">
+        <canvas id="canvas" onlclick='addObject()'width="300" height="300"></canvas>
+    </div>
+
+</body>
+
+</html>

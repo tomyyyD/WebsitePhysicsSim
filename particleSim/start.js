@@ -29,7 +29,7 @@ restSlider.oninput = function(){
 }
 
 canvas.addEventListener('click', function(evt){
-    console.log("click occured");
+    // console.log("click occured");
     var mousePos = getMousePos(evt)
 
     //gets random values

@@ -45,18 +45,20 @@ class PlanetaryCollision{
         // this.gameObjects.push(object3)
         // this.gameObjects.push(object4)
 
-        let intervals = 200
+        let intervals = 400
         let widthVal = Math.floor(this.width/intervals);
+        let heightVal = Math.floor(this.height/intervals)
         for (var i = 0; i < widthVal; i++){
-            for (var j = 0; j < 3; j++){
+            for (var j = 0; j < heightVal; j++){
                 let radius = this.randInRange(25,50);
                 let mass =  radius * 4;
                 let xPos = intervals * i + intervals/2;
                 let yPos = intervals * j + intervals/2;
-
-                let vx = this.randInRange(-50,50);
-                let vy = this.randInRange(-50,50);
-    
+                let vx = 0;
+                let vy = 0;
+                // let vx = this.randInRange(-50,50);
+                // let vy = this.randInRange(-50,50);
+                
                 let object = new ForceObject(this.context, xPos, yPos, vx, vy, mass, radius)
     
                 this.gameObjects.push(object);
@@ -98,14 +100,14 @@ class PlanetaryCollision{
                     // obj2.fx += -obj2.mass * obj2.vx / deltaTime;
                     // obj2.fy += -obj2.mass * obj2.vy / deltaTime;
 
-                    let velDiffX = obj2.vx - obj1.vx
-                    let velDiffY = obj2.vy - obj1.vy;
+                    // let velDiffX = obj2.vx - obj1.vx
+                    // let velDiffY = obj2.vy - obj1.vy;
 
 
-                    obj1.fx += obj2.mass * velDiffX / deltaTime;
-                    obj1.fy += obj2.mass * velDiffY / deltaTime;
-                    obj2.fx += -obj2.mass * velDiffX / deltaTime;
-                    obj2.fy += -obj2.mass * velDiffY / deltaTime;
+                    // obj1.fx += obj2.mass * velDiffX / deltaTime;
+                    // obj1.fy += obj2.mass * velDiffY / deltaTime;
+                    // obj2.fx += -obj2.mass * velDiffX / deltaTime;
+                    // obj2.fy += -obj2.mass * velDiffY / deltaTime;
                     
                     //console.log(`${obj1.fx} || ${obj2.fx} || ${velDiffX}:${velDiffY}`)
                     // console.log(`${obj2.mass * velDiffX / deltaTime} : ${interaction.fgx}`)

@@ -9,7 +9,7 @@ class PhysicsSim{
         this.height = null;;
         this.restitution = 1 - (restitution / 100);
         this.pause = false;
-        console.log(this.restitution)
+        //console.log(this.restitution)
 
         this.init(canvasId);
     }
