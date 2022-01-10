@@ -141,31 +141,30 @@ class PlanetaryCollision{
         this.deltaTime = (timestamp - this.lasttime) / 1000;
         this.lasttime = timestamp;
 
-        for (let i = 0; i < this.gameObjects.length; i++){
-            // console.log(`${this.gameObjects[i].fx} : ${this.gameObjects[i].fy}`)
-            this.gameObjects[i].fx = 0;
-            this.gameObjects[i].fy = 0;
-
-        }
-        //this.clearForces();
-        this.moveObjects();
-        this.applyForces(this.deltaTime);
-        for (let i = 0; i < this.gameObjects.length; i++){
-            this.gameObjects[i].update(this.deltaTime);
-        }
-
-        this.clearCanvas();
-
-        this.edgeDetection();
-
-        for (let i = 0; i < this.gameObjects.length; i ++){
-            this.gameObjects[i].draw()
-        }
-
         if (!this.paused){
-            window.requestAnimationFrame((timestamp) => this.gameLoop(timestamp))
+    
+            for (let i = 0; i < this.gameObjects.length; i++){
+                // console.log(`${this.gameObjects[i].fx} : ${this.gameObjects[i].fy}`)
+                this.gameObjects[i].fx = 0;
+                this.gameObjects[i].fy = 0;
+    
+            }
+            //this.clearForces();
+            this.moveObjects();
+            this.applyForces(this.deltaTime);
+            for (let i = 0; i < this.gameObjects.length; i++){
+                this.gameObjects[i].update(this.deltaTime);
+            }
+    
+            this.clearCanvas();
+    
+            this.edgeDetection();
+    
+            for (let i = 0; i < this.gameObjects.length; i ++){
+                this.gameObjects[i].draw()
+            }                
         }
-
+        window.requestAnimationFrame((timestamp) => this.gameLoop(timestamp))
         
     }
 

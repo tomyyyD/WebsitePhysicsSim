@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Planetary Simulation</title>
     <link rel="stylesheet" href="../style.css">
 
     <script defer src="ForceObject.js"></script>
@@ -16,9 +16,13 @@
 
 <body>
     <div class="controls">
-        <button onclick="startPlanets('canvas')" class="startSim">
+        <button id="startButton" onclick="startPlanets('canvas')" class="startSim">
             start
         </button>
+        <button id="pauseButton" onclick="pause()" class="startSim">
+            pause
+        </button>
+
         <a href="../index.html">Home</a>
     </div>
 
