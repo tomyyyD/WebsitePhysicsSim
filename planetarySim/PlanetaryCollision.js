@@ -5,7 +5,7 @@ class PlanetaryCollision{
         //this.timestamp = null;
         this.lasttime = performance.now();
         this.gameObjects = [];
-
+        this.paused = false;
         this.init(canvasId);
     }
 
@@ -34,8 +34,10 @@ class PlanetaryCollision{
 
     createObjects(){
 
-        // let object1 = new ForceObject(this.context, 100, 400, 20, -10, 90, 50)
-        // let object2 = new ForceObject(this.context, 500, 400, -4, 7, 30, 35)
+        //forceObject(context, xPos, yPos, vx, vy, mass, radius)
+        // let object1 = new ForceObject(this.context, 500, 400, 0, 0, 900, 30)
+        // let object2 = new ForceObject(this.context, 700, 400, 0, -150, 100, 10)
+        // let object3 = new ForceObject(this.context, 300, 400, 0, 150, 100, 10)
         // let object3 = new ForceObject(this.context, 600, 400, 18, -19, 10, 20)
         // let object4 = new ForceObject(this.context, 300, 200, -2, 16, 50, 40)   
         // this.totalMass = 90 + 30 + 10
@@ -45,19 +47,19 @@ class PlanetaryCollision{
         // this.gameObjects.push(object3)
         // this.gameObjects.push(object4)
 
-        let intervals = 400
+        let intervals = 300
         let widthVal = Math.floor(this.width/intervals);
         let heightVal = Math.floor(this.height/intervals)
         for (var i = 0; i < widthVal; i++){
             for (var j = 0; j < heightVal; j++){
-                let radius = this.randInRange(25,50);
-                let mass =  radius * 4;
+                let radius = this.randInRange(5,50);
+                let mass =  (1/Math.PI) * radius * radius;
                 let xPos = intervals * i + intervals/2;
                 let yPos = intervals * j + intervals/2;
-                let vx = 0;
-                let vy = 0;
-                // let vx = this.randInRange(-50,50);
-                // let vy = this.randInRange(-50,50);
+                // let vx = 0;
+                // let vy = 0;
+                let vx = this.randInRange(-50,50);
+                let vy = this.randInRange(-50,50);
                 
                 let object = new ForceObject(this.context, xPos, yPos, vx, vy, mass, radius)
     
@@ -160,7 +162,10 @@ class PlanetaryCollision{
             this.gameObjects[i].draw()
         }
 
-        window.requestAnimationFrame((timestamp) => this.gameLoop(timestamp))
+        if (!this.paused){
+            window.requestAnimationFrame((timestamp) => this.gameLoop(timestamp))
+        }
+
         
     }
 
@@ -186,26 +191,26 @@ class PlanetaryCollision{
 
             //check left wall
             if(obj.x < (obj.radius)){
-                obj.fx = Math.abs(obj.fx);
+                obj.fx = 0.8*Math.abs(obj.fx);
                 obj.vx = Math.abs(obj.vx);
                 obj.x = (obj.radius);
             }
             //check right wall
             else if(obj.x > this.width - (obj.radius)){
-                obj.fx = -Math.abs(obj.fx);
+                obj.fx = -0.8*Math.abs(obj.fx);
                 obj.vx = -Math.abs(obj.vx);
                 obj.x = this.width - (obj.radius);
             }
 
             //check top
             if (obj.y < (obj.radius)){
-                obj.fy = Math.abs(obj.fy);
+                obj.fy = 0.8*Math.abs(obj.fy);
                 obj.vy = Math.abs(obj.vy);
                 obj.y = (obj.radius);
             }
             //check bottom
             else if (obj.y > this.height - (obj.radius)){
-                obj.fy = -Math.abs(obj.fy);
+                obj.fy = -0.8*Math.abs(obj.fy);
                 obj.vy = -Math.abs(obj.vy);
                 obj.y = this.height - (obj.radius);
             }
