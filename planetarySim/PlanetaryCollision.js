@@ -165,7 +165,6 @@ class PlanetaryCollision{
             }                
         }
         window.requestAnimationFrame((timestamp) => this.gameLoop(timestamp))
-        
     }
 
     clearCanvas(){
@@ -215,6 +214,4 @@ class PlanetaryCollision{
             }
         }
     }
-
-
 }
