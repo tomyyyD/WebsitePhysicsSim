@@ -23,7 +23,7 @@ class FluidSim{
         this.canvas.height = this.container.clientHeight;
 
         canvas.addEventListener('mousedown', function(evt){
-            console.log("Mousedown");
+            // console.log("Mousedown");
             this.isDrawing = true;
             let rect = canvas.getBoundingClientRect()
             let mouseX = evt.clientX - rect.left;
@@ -31,16 +31,26 @@ class FluidSim{
             this.startMousePos = {
                 x: mouseX, 
                 y: mouseY
-            };    
+            };
+            this.curMousePos = {
+                x: this.startMousePos.x,
+                y: this.startMousePos.y
+            }
         }.bind(this), false);
         this.canvas.addEventListener('mouseup', function(evt){
             this.isDrawing = false;
-            this.spawnObjects(evt)
+            
+            //this.spawnObjects(evt)
         }.bind(this), false);
         this.canvas.addEventListener("mousemove", function(evt){
             if (this.isDrawing){
-                console.log("drawing")
-                this.createSpawnVisual(evt);
+                // console.log("drawing")
+                let rect = canvas.getBoundingClientRect();
+                this.curMousePos = {
+                    x: evt.clientX - rect.left,
+                    y: evt.clientY - rect.top
+                }
+                //this.createSpawnVisual(evt);
             }
         }.bind(this), false);
         
@@ -69,6 +79,23 @@ class FluidSim{
         for (let i = 0; i < this.gameObjects.length; i ++){
             this.gameObjects[i].draw();
         }
+
+        if (this.isDrawing){
+            this.ctx.fillStyle = '#3273a8'
+            this.ctx.beginPath();
+            this.ctx.rect(this.startMousePos.x, this.startMousePos.y, this.curMousePos.x - this.startMousePos.x, this.curMousePos.y - this.startMousePos.y);
+            //this.ctx.fill();
+            this.ctx.stroke();
+            for (let i = 10; i < this.curMousePos.x - this.startMousePos.x - 10; i += 20){
+                for (let j = 10; j < this.curMousePos.y - this.startMousePos.y - 10; j += 20){
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.startMousePos.x + i, this.startMousePos.y + j, 5, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                    this.ctx.stroke();    
+                }
+            }
+        }
+
     }
 
     clearCanvas(){
@@ -103,21 +130,22 @@ class FluidSim{
         //console.log(this.gameObjects);
     }
 
-    createSpawnVisual(evt){
-        let rect = canvas.getBoundingClientRect()
-        let curMousePos = {
-            x: evt.clientX - rect.left,
-            y: evt.clientY - rect.top
-        }
-        console.log(`(${this.startMousePos.x} : ${this.startMousePos.y})`)
-        console.log(`(${curMousePos.x} : ${curMousePos.y})`)
+    // createSpawnVisual(evt){
+    //     this.clearCanvas();
+    //     let rect = canvas.getBoundingClientRect()
+    //     let curMousePos = {
+    //         x: evt.clientX - rect.left,
+    //         y: evt.clientY - rect.top
+    //     }
+    //     console.log(`(${this.startMousePos.x} : ${this.startMousePos.y})`)
+    //     console.log(`(${curMousePos.x} : ${curMousePos.y})`)
 
-        this.ctx.fillstyle = '#3273a8'
-        this.ctx.beginPath();
-        this.ctx.rect(this.startMousePos.x, this.startMousePos.y, curMousePos.x, curMousePos.y);
-        this.ctx.fill();
-        this.ctx.stroke();
-    }
+    //     this.ctx.fillStyle = '#3273a8'
+    //     this.ctx.beginPath();
+    //     this.ctx.rect(this.startMousePos.x, this.startMousePos.y, curMousePos.x - this.startMousePos.x, curMousePos.y - this.startMousePos.y);
+    //     this.ctx.fill();
+    //     this.ctx.stroke();
+    // }
 
     spawnObjects(evt){
         let rect = canvas.getBoundingClientRect()
