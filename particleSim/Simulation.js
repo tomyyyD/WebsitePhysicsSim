@@ -60,27 +60,31 @@ class PhysicsSim{
     }
 
     gameLoop(timeStamp){
-        //calc time difference
-        var secondsPassed = (timeStamp - this.lastTime) / 1000;
+
+        let substep = 4
+        var secondsPassed = (timeStamp - this.lastTime) / 1000 /substep;
         this.lastTime = timeStamp;
-
-        //loops over to update all physics objects
-        for (var i = 0; i < this.gameObjects.length; i++){
-            this.gameObjects[i].update(secondsPassed);
-            this.gameObjects[i].vy += this.gravity * 100 * secondsPassed;
+        for (let step = 0; step < substep; step++){
+            //calc time difference
+    
+            //loops over to update all physics objects
+            for (var i = 0; i < this.gameObjects.length; i++){
+                this.gameObjects[i].update(secondsPassed);
+                this.gameObjects[i].vy += this.gravity * 100 * secondsPassed;
+            }
+    
+            //here I need to detect collision
+            this.detectCollision();
+            this.edgeDetection();
+            this.clearCanvas();
+    
+            //loops over to draw all physics objects
+            for (var i = 0; i < this.gameObjects.length; i++){
+                this.gameObjects[i].draw();
+    
+            }
+    
         }
-
-        //here I need to detect collision
-        this.detectCollision();
-        this.edgeDetection();
-        this.clearCanvas();
-
-        //loops over to draw all physics objects
-        for (var i = 0; i < this.gameObjects.length; i++){
-            this.gameObjects[i].draw();
-
-        }
-
         //recursion moment
         if (!this.pause){
             window.requestAnimationFrame((timeStamp) => this.gameLoop(timeStamp))

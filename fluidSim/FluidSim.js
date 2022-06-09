@@ -40,7 +40,7 @@ class FluidSim{
         this.canvas.addEventListener('mouseup', function(evt){
             this.isDrawing = false;
             
-            //this.spawnObjects(evt)
+            this.spawnObjects(evt)
         }.bind(this), false);
         this.canvas.addEventListener("mousemove", function(evt){
             if (this.isDrawing){
